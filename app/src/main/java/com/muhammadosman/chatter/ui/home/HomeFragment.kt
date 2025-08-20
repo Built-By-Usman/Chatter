@@ -69,13 +69,36 @@ class HomeFragment : Fragment() {
                 arrayList.clear()
                 for (doc in docs) {
                     val id = doc.id
-                    val name = doc.getString("name") ?: ""
-                    val email = doc.getString("email") ?: ""
+                    var name = doc.getString("name") ?: ""
+                    var email = doc.getString("email") ?: ""
                     val lastMessage = doc.getString("lastMessage") ?: ""
                     val timestamp = doc.getLong("timestamp") ?: 0L
 
-                    val user = User(id, name, email, lastMessage, timestamp)
+                    var user = User(id, name, email, lastMessage, timestamp)
                     arrayList.add(user)
+
+                    // ✅ If name/email missing → fetch from main users collection and update
+                    if (name.isEmpty() || email.isEmpty()) {
+                        db.collection("users").document(id).get()
+                            .addOnSuccessListener { realDoc ->
+                                val fetchedName = realDoc.getString("name") ?: "Unknown"
+                                val fetchedEmail = realDoc.getString("email") ?: ""
+
+                                // update local object (so UI updates instantly)
+                                user.name = fetchedName
+                                user.email = fetchedEmail
+                                adapter.notifyDataSetChanged()
+
+                                // also update in Firestore so next time it's already there
+                                val update = mapOf(
+                                    "name" to fetchedName,
+                                    "email" to fetchedEmail
+                                )
+                                db.collection("users").document(userId)
+                                    .collection("persons").document(id)
+                                    .set(update, com.google.firebase.firestore.SetOptions.merge())
+                            }
+                    }
                 }
                 adapter.notifyDataSetChanged()
                 showLoading(false)
@@ -84,7 +107,6 @@ class HomeFragment : Fragment() {
                 showLoading(false)
             }
     }
-
     private fun searchByEmail() {
         val email = binding.searchByEmail.text.toString().trim()
         if (email.isEmpty()) return
@@ -104,10 +126,12 @@ class HomeFragment : Fragment() {
                     val user = User(id, name, emailFound)
                     arrayList.add(user)
                 }
+                binding.searchByEmail.setText("")
                 adapter.notifyDataSetChanged()
                 showLoading(false)
             }
             .addOnFailureListener {
+                binding.searchByEmail.setText("")
                 showLoading(false)
             }
     }

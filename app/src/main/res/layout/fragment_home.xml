@@ -26,6 +26,7 @@
         android:hint="Search by email"
         app:startIconDrawable="@drawable/ic_search"
         android:layout_margin="@dimen/_10sdp"
+        app:hintTextColor="@color/primaryColor"
         app:boxStrokeColor="@color/primaryColor"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"

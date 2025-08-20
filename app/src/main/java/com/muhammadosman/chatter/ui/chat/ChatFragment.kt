@@ -45,6 +45,7 @@ class ChatFragment : Fragment() {
 
         loadPersonInfo()
         loadMessages()
+        
 
         binding.sendBtn.setOnClickListener {
             val text = binding.messageEt.text.toString().trim()
@@ -64,9 +65,7 @@ class ChatFragment : Fragment() {
         messages = ArrayList()
         adapter = ChatAdapter(messages, userId)
 
-        binding.chatRecycler.layoutManager = LinearLayoutManager(requireContext()).apply {
-            stackFromEnd = true
-        }
+        binding.chatRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.chatRecycler.adapter = adapter
     }
     private fun loadPersonInfo() {
@@ -101,11 +100,31 @@ class ChatFragment : Fragment() {
                         binding.emptyAnimation.visibility = View.GONE
                         binding.chatRecycler.visibility = View.VISIBLE
                         binding.chatRecycler.scrollToPosition(messages.size - 1)
+
+                        // ✅ Ensure we have person name stored
+                        db.collection("users").document(userId)
+                            .collection("persons").document(personId)
+                            .get()
+                            .addOnSuccessListener { personDoc ->
+                                if (!personDoc.exists() || personDoc.getString("name").isNullOrEmpty()) {
+                                    db.collection("users").document(personId).get()
+                                        .addOnSuccessListener { realDoc ->
+                                            val name = realDoc.getString("name") ?: "Unknown"
+                                            val email = realDoc.getString("email") ?: ""
+                                            val update = mapOf(
+                                                "name" to name,
+                                                "email" to email
+                                            )
+                                            db.collection("users").document(userId)
+                                                .collection("persons").document(personId)
+                                                .set(update, com.google.firebase.firestore.SetOptions.merge())
+                                        }
+                                }
+                            }
                     }
                 }
             }
     }
-
     private fun sendMessage(text: String) {
         val msgId = db.collection("messages").document().id
         val timestamp = System.currentTimeMillis()
@@ -118,11 +137,20 @@ class ChatFragment : Fragment() {
             timestamp = timestamp
         )
 
-        // ✅ Save message for current user
+        // Save message for sender
         db.collection("users")
             .document(userId)
             .collection("persons")
             .document(personId)
+            .collection("messages")
+            .document(msgId)
+            .set(msg)
+
+// Save message for receiver too ✅
+        db.collection("users")
+            .document(personId)
+            .collection("persons")
+            .document(userId)
             .collection("messages")
             .document(msgId)
             .set(msg)
