@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+        <!-- Primary Brand Color -->
+        <color name="primaryColor">#4A90E2</color> <!-- Modern Blue -->
+        <color name="primaryDarkColor">#357ABD</color>
+        <color name="accentColor">#50E3C2</color> <!-- Aqua accent -->
+
+        <!-- Backgrounds -->
+        <color name="background_light">#FFFFFF</color>
+        <color name="background_dark">#F5F7FA</color>
+
+        <!-- Text Colors -->
+        <color name="primaryText">#212121</color> <!-- Strong readable black -->
+        <color name="secondaryText">#757575</color> <!-- Subtle gray -->
+
+        <!-- Others -->
+        <color name="errorColor">#E53935</color>
+        <color name="successColor">#43A047</color>
+        <color name="dividerColor">#E0E0E0</color>
+        <color name="white">#FFFFFF</color>
+        <color name="black">#000000</color>
 </resources>

@@ -287,7 +287,25 @@
         </entry>
         <entry key="vectorWizard">
           <value>
-            <PersistentState />
+            <PersistentState>
+              <option name="children">
+                <map>
+                  <entry key="vectorAssetStep">
+                    <value>
+                      <PersistentState>
+                        <option name="values">
+                          <map>
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="search_24dp_e3e3e3_fill0_wght400_grad0_opsz24" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" />
+                          </map>
+                        </option>
+                      </PersistentState>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </PersistentState>
           </value>
         </entry>
       </map>
