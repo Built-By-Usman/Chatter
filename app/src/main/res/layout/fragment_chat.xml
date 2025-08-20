@@ -8,18 +8,18 @@
     <!-- Top bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/_50sdp"
         android:background="@color/primaryColor"
-        android:padding="8dp">
+        android:padding="@dimen/_5sdp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardCornerRadius="20dp"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            app:cardCornerRadius="@dimen/_16sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/avatar"
@@ -32,15 +32,25 @@
             android:id="@+id/person_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/_6sdp"
             android:text="Muhammad Usman"
-            android:textSize="16sp"
             android:textColor="@android:color/white"
+            android:textSize="@dimen/_16ssp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/image"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/emptyAnimation"
+        android:layout_width="@dimen/_175sdp"
+        android:layout_height="@dimen/_175sdp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
 
     <!-- Chat list -->
     <androidx.recyclerview.widget.RecyclerView
@@ -48,16 +58,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:padding="@dimen/_6sdp" />
 
     <!-- Input bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#f6f6f6"
         android:orientation="horizontal"
-        android:padding="6dp"
-        android:background="#f6f6f6">
+        android:padding="@dimen/_4sdp">
 
         <EditText
             android:id="@+id/messageEt"
@@ -65,15 +75,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/et_bg"
-            android:padding="10dp"
-            android:hint="Type a message..." />
+            android:hint="Type a message..."
+            android:padding="@dimen/_8sdp" />
 
         <ImageButton
             android:id="@+id/sendBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_send"
+            android:layout_width="@dimen/_38sdp"
+            android:layout_height="@dimen/_38sdp"
             android:background="@android:color/transparent"
-            android:contentDescription="Send" />
+            android:contentDescription="Send"
+            android:src="@drawable/ic_send" />
     </LinearLayout>
 </LinearLayout>

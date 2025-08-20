@@ -1,85 +1,129 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:background="@color/background_light"
-    android:padding="24dp">
+    android:padding="@dimen/_20sdp">
 
-    <!-- Greeting -->
-    <TextView
+    <!-- Loading Animation -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingAnim"
+        android:layout_width="@dimen/_85sdp"
+        android:layout_height="@dimen/_85sdp"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/loading"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Greeting Group -->
+    <LinearLayout
+        android:id="@+id/greetingGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Good to see you 👋"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/primaryText"
-        android:layout_marginTop="40dp"/>
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_50sdp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login to continue your journey"
-        android:textColor="@color/secondaryText"
-        android:textSize="14sp"
-        android:layout_marginBottom="32dp"/>
+        <TextView
+            android:id="@+id/greetingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Good to see you 👋"
+            android:textSize="@dimen/_21ssp"
+            android:textStyle="bold"
+            android:textColor="@color/primaryText" />
+
+        <TextView
+            android:id="@+id/greetingSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login to continue your journey"
+            android:textColor="@color/secondaryText"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginTop="@dimen/_3sdp" />
+    </LinearLayout>
 
     <!-- Email Input -->
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
+        android:id="@+id/emailInput"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Email"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        app:boxStrokeColor="@color/primaryColor"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/greetingGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_28sdp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:imeOptions="actionNext" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Input -->
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
+        android:id="@+id/passwordInput"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Password"
         app:endIconMode="password_toggle"
+        app:boxStrokeColor="@color/primaryColor"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/emailInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:imeOptions="actionDone" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Login Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_btn"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="Login"
         android:textSize="16sp"
         android:textColor="@color/white"
         app:cornerRadius="12dp"
         app:iconTint="@color/white"
-        app:backgroundTint="@color/primaryColor"/>
+        app:backgroundTint="@color/primaryColor"
+        app:layout_constraintTop_toBottomOf="@id/passwordInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
 
-    <!-- Don't have account -->
+    <!-- Don't have an account -->
     <LinearLayout
+        android:id="@+id/signupGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/login_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Don’t have an account?"
-            android:textColor="@color/secondaryText"/>
+            android:textColor="@color/secondaryText" />
 
         <TextView
             android:id="@+id/signup"
@@ -87,6 +131,7 @@
             android:layout_height="wrap_content"
             android:text=" Sign up"
             android:textStyle="bold"
-            android:textColor="@color/primaryColor"/>
+            android:textColor="@color/primaryColor" />
     </LinearLayout>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

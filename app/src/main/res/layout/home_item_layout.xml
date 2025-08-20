@@ -1,61 +1,65 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:layout_marginVertical="4dp"
+    android:layout_height="@dimen/_70sdp"
+    android:layout_marginVertical="@dimen/_4sdp"
     android:clickable="true"
     android:focusable="true"
-    app:cardElevation="0dp"
     app:cardBackgroundColor="@color/background_light"
+    app:cardCornerRadius="@dimen/_14sdp"
+    app:cardElevation="@dimen/_3sdp"
     app:strokeColor="@color/dividerColor"
     app:strokeWidth="0dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="12dp">
+        android:orientation="horizontal"
+        android:padding="@dimen/_10sdp">
 
         <!-- User Avatar -->
         <ImageView
             android:id="@+id/avatar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/avatar"
-            android:scaleType="centerCrop"
-            android:contentDescription="User Avatar"
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_48sdp"
             android:background="@drawable/circle_bg"
-            android:clipToOutline="true" />
+            android:clipToOutline="true"
+            android:contentDescription="User Avatar"
+            android:elevation="@dimen/_2sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar" />
 
         <!-- Name + Message -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:orientation="vertical"
-            android:paddingStart="12dp"
-            android:gravity="center_vertical">
+            android:paddingStart="@dimen/_10sdp">
 
             <TextView
                 android:id="@+id/person_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Name"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText"
+                android:ellipsize="end"
                 android:maxLines="1"
-                android:ellipsize="end"/>
+                android:text="User Name"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/person_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Last message here..."
-                android:textSize="14sp"
-                android:textColor="@color/secondaryText"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:ellipsize="end"
                 android:maxLines="1"
-                android:ellipsize="end"/>
+                android:text="Last message here..."
+                android:textColor="@color/secondaryText"
+                android:textSize="@dimen/_13ssp" />
         </LinearLayout>
 
         <!-- Message Time -->
@@ -63,9 +67,11 @@
             android:id="@+id/message_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:gravity="end"
             android:text="12:45 PM"
-            android:textSize="12sp"
             android:textColor="@color/secondaryText"
-            android:gravity="end"/>
+            android:textSize="@dimen/_11ssp"
+            android:textStyle="bold" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -11,7 +11,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
-import com.muhammadosman.chatter.R
 import com.muhammadosman.chatter.data.adapters.ChatAdapter
 import com.muhammadosman.chatter.data.models.Message
 import com.muhammadosman.chatter.databinding.FragmentChatBinding
@@ -19,17 +18,14 @@ import com.muhammadosman.chatter.databinding.FragmentChatBinding
 class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var preferences: SharedPreferences
     private lateinit var userId: String
     private lateinit var personId: String
-
     private lateinit var adapter: ChatAdapter
     private lateinit var messages: ArrayList<Message>
 
-    // ✅ SafeArgs
     private val args: ChatFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -45,7 +41,7 @@ class ChatFragment : Fragment() {
 
         init()
 
-        personId = args.personId// ✅ safe args
+        personId = args.personId
 
         loadPersonInfo()
         loadMessages()
@@ -69,17 +65,14 @@ class ChatFragment : Fragment() {
         adapter = ChatAdapter(messages, userId)
 
         binding.chatRecycler.layoutManager = LinearLayoutManager(requireContext()).apply {
-            stackFromEnd = true // ✅ chat starts from bottom
+            stackFromEnd = true
         }
         binding.chatRecycler.adapter = adapter
     }
-
-    // ✅ Show person name with static avatar (no Firestore avatarUrl)
     private fun loadPersonInfo() {
         db.collection("users").document(personId).get()
             .addOnSuccessListener { doc ->
                 binding.personName.text = doc.getString("name") ?: "Unknown"
-                // always use local drawable avatar
             }
     }
 
@@ -91,7 +84,6 @@ class ChatFragment : Fragment() {
             .collection("messages")
             .orderBy("timestamp")
             .addSnapshotListener { snapshot, _ ->
-                // 🛡 prevent crash if fragment view is destroyed
                 if (_binding == null) return@addSnapshotListener
 
                 if (snapshot != null) {
@@ -101,7 +93,15 @@ class ChatFragment : Fragment() {
                         if (message != null) messages.add(message)
                     }
                     adapter.notifyDataSetChanged()
-                    binding.chatRecycler.scrollToPosition(messages.size - 1)
+
+                    if (messages.isEmpty()) {
+                        binding.emptyAnimation.visibility = View.VISIBLE
+                        binding.chatRecycler.visibility = View.GONE
+                    } else {
+                        binding.emptyAnimation.visibility = View.GONE
+                        binding.chatRecycler.visibility = View.VISIBLE
+                        binding.chatRecycler.scrollToPosition(messages.size - 1)
+                    }
                 }
             }
     }

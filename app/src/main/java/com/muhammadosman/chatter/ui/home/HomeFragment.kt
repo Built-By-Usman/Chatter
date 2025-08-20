@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.muhammadosman.chatter.R
 import com.muhammadosman.chatter.data.adapters.HomeAdapter
 import com.muhammadosman.chatter.data.models.User
 import com.muhammadosman.chatter.databinding.FragmentHomeBinding
@@ -48,7 +47,19 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.loadingAnim.visibility = View.VISIBLE
+            binding.homeRecyclerView.visibility = View.GONE
+        } else {
+            binding.loadingAnim.visibility = View.GONE
+            binding.homeRecyclerView.visibility = View.VISIBLE
+        }
+    }
+
     private fun loadChat() {
+        showLoading(true)
+
         db.collection("users")
             .document(userId)
             .collection("persons")
@@ -67,12 +78,18 @@ class HomeFragment : Fragment() {
                     arrayList.add(user)
                 }
                 adapter.notifyDataSetChanged()
+                showLoading(false)
+            }
+            .addOnFailureListener {
+                showLoading(false)
             }
     }
 
     private fun searchByEmail() {
         val email = binding.searchByEmail.text.toString().trim()
         if (email.isEmpty()) return
+
+        showLoading(true)
 
         db.collection("users")
             .whereEqualTo("email", email)
@@ -88,13 +105,16 @@ class HomeFragment : Fragment() {
                     arrayList.add(user)
                 }
                 adapter.notifyDataSetChanged()
+                showLoading(false)
+            }
+            .addOnFailureListener {
+                showLoading(false)
             }
     }
 
     private fun init() {
         arrayList = ArrayList()
         adapter = HomeAdapter(arrayList) { user ->
-            // Navigate to ChatFragment with personId
             val action = HomeFragmentDirections.actionHomeFragmentToChatFragment(user.id)
             findNavController().navigate(action)
         }

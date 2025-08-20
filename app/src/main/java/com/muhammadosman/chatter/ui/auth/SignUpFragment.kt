@@ -54,40 +54,52 @@ class SignUpFragment : Fragment() {
     }
 
     private fun signup(name: String, email: String, password: String) {
+        // Show loading
+        binding.loadingAnim.visibility = View.VISIBLE
+        binding.signupBtn.isEnabled = false
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
                 val user = auth.currentUser
                 val userId = result.user?.uid ?: return@addOnSuccessListener
 
-                // send verification email
-                user?.sendEmailVerification()?.addOnSuccessListener {
-                    // save user in Firestore with isVerified = false
-                    val userData = hashMapOf(
-                        "id" to userId,
-                        "name" to name,
-                        "email" to email,
-                        "isVerified" to false
-                    )
+                user?.sendEmailVerification()
+                    ?.addOnSuccessListener {
+                        val userData = hashMapOf(
+                            "id" to userId,
+                            "name" to name,
+                            "email" to email
+                        )
 
-                    db.collection("users")
-                        .document(userId)
-                        .set(userData)
-                        .addOnSuccessListener {
-                            utils.showToast(requireContext(), "Verify your email, then login")
-                            findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
-                        }
-                        .addOnFailureListener {
-                            utils.showToast(requireContext(), "Failed to save user data")
-                        }
-                }?.addOnFailureListener {
-                    utils.showToast(requireContext(), "Failed to send verification email")
-                }
+                        db.collection("users")
+                            .document(userId)
+                            .set(userData)
+                            .addOnSuccessListener {
+                                // Hide loading
+                                binding.loadingAnim.visibility = View.GONE
+                                binding.signupBtn.isEnabled = true
+
+                                utils.showToast(requireContext(), "Verify your email, then login")
+                                findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+                            }
+                            .addOnFailureListener {
+                                binding.loadingAnim.visibility = View.GONE
+                                binding.signupBtn.isEnabled = true
+                                utils.showToast(requireContext(), "Failed to save user data")
+                            }
+                    }
+                    ?.addOnFailureListener {
+                        binding.loadingAnim.visibility = View.GONE
+                        binding.signupBtn.isEnabled = true
+                        utils.showToast(requireContext(), "Failed to send verification email")
+                    }
             }
             .addOnFailureListener { e ->
+                binding.loadingAnim.visibility = View.GONE
+                binding.signupBtn.isEnabled = true
                 utils.showToast(requireContext(), e.localizedMessage ?: "Signup failed")
             }
     }
-
     private fun validateInput(name: String, email: String, password: String): Boolean {
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) return false
         if (password.length < 6) {

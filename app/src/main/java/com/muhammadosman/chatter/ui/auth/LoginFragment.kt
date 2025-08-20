@@ -57,6 +57,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun login(email: String, password: String) {
+        // Show loading
+        binding.loadingAnim.visibility = View.VISIBLE
+        binding.loginBtn.isEnabled = false
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
                 val user = auth.currentUser
@@ -67,6 +71,10 @@ class LoginFragment : Fragment() {
                         .document(userId)
                         .get()
                         .addOnSuccessListener { doc ->
+                            // Hide loading
+                            binding.loadingAnim.visibility = View.GONE
+                            binding.loginBtn.isEnabled = true
+
                             if (doc.exists()) {
                                 val name = doc.getString("name") ?: ""
                                 val emailDb = doc.getString("email") ?: ""
@@ -82,15 +90,23 @@ class LoginFragment : Fragment() {
                                 findNavController().navigate(R.id.action_loginFragment_to_home_fragment)
                             }
                         }
+                        .addOnFailureListener {
+                            binding.loadingAnim.visibility = View.GONE
+                            binding.loginBtn.isEnabled = true
+                            utils.showToast(requireContext(), "Failed to load user data")
+                        }
                 } else {
+                    binding.loadingAnim.visibility = View.GONE
+                    binding.loginBtn.isEnabled = true
                     utils.showToast(requireContext(), "Verify Your Email")
                 }
             }
             .addOnFailureListener { e ->
+                binding.loadingAnim.visibility = View.GONE
+                binding.loginBtn.isEnabled = true
                 utils.showToast(requireContext(), e.localizedMessage ?: "Login Failed")
             }
     }
-
     private fun validateInput(email: String, password: String): Boolean {
         return email.isNotEmpty() && password.isNotEmpty()
     }
